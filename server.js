@@ -1,13 +1,18 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const authorsRoute = require("./routes/authors");
+const postsRoute = require("./routes/posts");
 require("dotenv").config();
 const PORT = 5050;
 
 const app = express();
 
+//middleware parser json
+app.use(express.json());
+
 //routes
 app.use("/", authorsRoute);
+app.use("/", postsRoute);
 
 //http://localhost:5050/
 /*app.get("/", (req, res) => {
