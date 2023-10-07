@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require('cors')
 const authorsRoute = require("./routes/authors");
 const postsRoute = require("./routes/posts");
 require("dotenv").config();
@@ -7,6 +8,8 @@ const PORT = 5050;
 
 const app = express();
 
+//cors collega frontend e backend
+app.use(cors())
 //middleware parser json
 app.use(express.json());
 
