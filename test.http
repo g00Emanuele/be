@@ -1,6 +1,9 @@
 //CHIAMATE PER I POST
 
-GET http://localhost:5050/posts/byTitle?title=mes
+GET http://localhost:5050/posts
+
+####
+GET http://localhost:5050/authors/byId/651d3e4114e8904e0f148f2f
 
 ####
 POST http://localhost:5050/posts/

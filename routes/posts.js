@@ -3,15 +3,13 @@ const posts = express.Router();
 const logger = require("../middleware/logger");
 const validatePost = require("../middleware/validatePost");
 const PostModel = require("../models/post");
+const AuthorModel = require("../models/author");
 
 //GET DI TUTTI I POST
 posts.get("/posts", logger, async (req, res) => {
   try {
     const posts = await PostModel.find();
-    res.status(200).send({
-      statusCode: 200,
-      posts,
-    });
+    res.status(200).send(posts);
   } catch (error) {
     res.status(500).send({
       statusCode: 500,
@@ -63,8 +61,11 @@ posts.get("/posts/byTitle", async (req, res) => {
   }
 });
 
+//GET DEI POST DI UN SINGOLO AUTHOR
+
+
 //POST DI UN BLOGPOST
-posts.post("/posts/create", validatePost, async (req, res) => {
+posts.post("/posts/create", logger, validatePost, async (req, res) => {
   const newPost = new PostModel({
     title: req.body.title,
     category: req.body.category,
