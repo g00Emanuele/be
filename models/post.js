@@ -24,7 +24,7 @@ const PostSchema = new mongoose.Schema(
       },
       unit: {
         type: String,
-        required: true,
+        default: "minutes"
       },
     },
     author: {
@@ -34,7 +34,7 @@ const PostSchema = new mongoose.Schema(
       },
       avatar: {
         type: String,
-        required: true,
+        default: "default"
       },
     },
     content: {

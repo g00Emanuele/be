@@ -1,4 +1,5 @@
 const validatePost = (req, res, next) => {
+  res.status(200).send(req.body)
   const errors = [];
   const { title, category, cover, author, readTime } = req.body;
   if (typeof title !== "string") {
