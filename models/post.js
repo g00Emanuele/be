@@ -9,7 +9,7 @@ const PostSchema = new mongoose.Schema(
     category: {
       type: String,
       required: true,
-      default: "General",
+      default: "Category1",
     },
     cover: {
       type: String,
