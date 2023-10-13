@@ -7,9 +7,22 @@ const AuthorModel = require("../models/author");
 
 //GET DI TUTTI I POST
 posts.get("/posts", logger, async (req, res) => {
+  const { page = 1, pageSize = 4 } = req.query;
+
   try {
-    const posts = await PostModel.find();
-    res.status(200).send(posts);
+    const posts = await PostModel.find()
+      .limit(pageSize)
+      .skip((page - 1) * pageSize);
+
+    const totalPosts = await PostModel.count()
+
+    res.status(200).send({
+      statusCode:200,
+      posts,
+      currentPage: Number(page),
+      totalPages: Math.ceil(totalPosts/pageSize),
+      totalPosts
+    });
   } catch (error) {
     res.status(500).send({
       statusCode: 500,
@@ -62,7 +75,6 @@ posts.get("/posts/byTitle", async (req, res) => {
 });
 
 //GET DEI POST DI UN SINGOLO AUTHOR
-
 
 //POST DI UN BLOGPOST
 posts.post("/posts/create", logger, validatePost, async (req, res) => {
