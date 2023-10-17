@@ -28,14 +28,8 @@ const PostSchema = new mongoose.Schema(
       },
     },
     author: {
-      name: {
-        type: String,
-        required: true,
-      },
-      avatar: {
-        type: String,
-        default: "default"
-      },
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'authorModel'
     },
     content: {
       type: String,

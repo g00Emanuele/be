@@ -1,5 +1,38 @@
-//CHIAMATE PER I POST
+//COMMENTI
 
+GET http://localhost:5050/posts/652eb1e94b54c484317c3117/comments
+
+####
+POST http://localhost:5050/posts/652eaed5ad3a02117b8a719c/comments/createComment
+Content-Type: application/json
+
+{
+  "post":"652eaed5ad3a02117b8a719c",
+  "comment": "Prova a commentare",
+  "author": "Ema"
+}
+
+####
+GET http://localhost:5050/posts/652eaed5ad3a02117b8a719c/comments/652eb663dfd87dd0f32371c7
+
+####
+DELETE http://localhost:5050/posts/652eaed5ad3a02117b8a719c/comments/652eb663dfd87dd0f32371c7/delete HTTP/1.1
+
+####
+PATCH  http://localhost:5050/posts/652eaed5ad3a02117b8a719c/comments/652eb663dfd87dd0f32371c7 HTTP/1.1
+Content-Type: application/json
+
+{
+  "comment":"Commento MODIFICATO"
+}
+
+
+
+
+
+
+//CHIAMATE PER I POST
+####
 GET http://localhost:5050/posts?page=1
 
 ####
@@ -10,10 +43,10 @@ POST http://localhost:5050/posts/create
 Content-Type: application/json
 
 {
-  "title":"POST 10",
+  "title":"POST con Ref",
   "category": "Category1",
-  "cover": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwallpapers.com%2Fwallpapers%2F1920x1080-full-hd-nature-empty-road-trees-around-z6u9c3faplzs5ung.html&psig=AOvVaw1rM7fnJy2IXNeny7Dbzklr&ust=1696198184566000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCPiev-Ss04EDFQAAAAAdAAAAABAE",
-  "author": {"name":"Emanuele", "avatar":"ManuLele"},
+  "cover": "https://picsum.photos/200/300",
+  "author": "Ema",
   "readTime": {"value":2, "unit":"minutes"},
   "content": "Contenuto del post"
 }
@@ -44,7 +77,7 @@ GET http://localhost:5050/authors/
 
 ####
 
-POST http://localhost:5050/authors
+POST http://localhost:5050/authors/create
 Content-Type: application/json
 
 {
@@ -68,3 +101,5 @@ Content-Type: application/json
 
 ####
 DELETE http://localhost:5050/authors/651d38e1f23770f9334f7e34 HTTP/1.1
+
+

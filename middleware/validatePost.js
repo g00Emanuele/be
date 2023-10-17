@@ -10,11 +10,8 @@ const validatePost = (req, res, next) => {
   if (typeof cover !== "string" && cover) {
     errors.push("Cover must be a string");
   }
-  if (typeof author.name !== "string") {
-    errors.push("Author name must be a string");
-  }
-  if (typeof author.avatar !== "string" && author.avatar) {
-    errors.push("Author avatar must be a string");
+  if (typeof author !== "string") {
+    errors.push("Author must be a string");
   }
   if (typeof readTime.value !== "number") {
     errors.push("readTime value must be a number");
