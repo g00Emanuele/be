@@ -3,10 +3,14 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const authorsRoute = require("./routes/authors");
 const postsRoute = require("./routes/posts");
+const emailRoute = require("./routes/sendEmail");
+const path = require("path");
 require("dotenv").config();
 const PORT = 5050;
 
 const app = express();
+
+app.use("/public", express.static(path.join(__dirname, "public")));
 
 //cors collega frontend e backend
 app.use(cors());
@@ -16,6 +20,7 @@ app.use(express.json());
 //routes
 app.use("/", authorsRoute);
 app.use("/", postsRoute);
+app.use("/", emailRoute);
 
 //http://localhost:5050/
 /*app.get("/", (req, res) => {
@@ -37,4 +42,3 @@ db.once("open", () => {
 });
 
 app.listen(PORT, () => console.log(`Server up and running on port ${PORT}`));
-  

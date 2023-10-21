@@ -4,6 +4,79 @@ const logger = require("../middleware/logger");
 const validatePost = require("../middleware/validatePost");
 const PostModel = require("../models/post");
 const CommentModel = require("../models/comment");
+require("dotenv").config();
+const multer = require("multer");
+const crypto = require("crypto");
+const cloudinary = require("cloudinary").v2;
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+const cloudStorage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "myFiles",
+    format: async (req, file) => "jpg",
+    public_id: (req, file) => file.name,
+  },
+});
+
+const internalStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    // posizione in cui salvare i file
+    cb(null, "./public");
+  },
+  filename: (req, file, cb) => {
+    // generiamo un suffisso unico per il nostro file
+    const uniqueSuffix = `${Date.now()}-${crypto.randomUUID()}`;
+    // qui ci recuperiamo da tutto solo l'estensione dello stesso file
+    const fileExtension = file.originalname.split(".").pop();
+    // eseguiamo la cb con il titolo completo
+    cb(null, `${file.fieldname}-${uniqueSuffix}.${fileExtension}`);
+  },
+});
+
+const upload = multer({ storage: internalStorage });
+const cloudUpload = multer({ storage: cloudStorage });
+
+//POST DELL'IMMAGINE DEL BLOGPOST CON CLOUDINARY
+posts.post(
+  "/posts/cloudUpload",
+  cloudUpload.single("cover"),
+  async (req, res) => {
+    try {
+      res.status(200).json({
+        cover: req.file.path,
+      });
+    } catch (error) {
+      res.status(500).send({
+        statusCode: 500,
+        message: "Errore interno del server",
+      });
+    }
+  }
+);
+
+//POST DELL'IMMAGINE DEL BLOGPOST
+posts.post("/posts/upload", upload.single("cover"), async (req, res) => {
+  const url = `${req.protocol}://${req.get("host")}`; // http://localhost:5050
+
+  console.log(req.file);
+
+  try {
+    const imgUrl = req.file.filename;
+    res.status(200).json({ cover: `${url}/public/${imgUrl}` });
+  } catch (e) {
+    res.status(500).send({
+      statusCode: 500,
+      message: "Errore interno del server",
+    });
+  }
+});
 
 //GET DI TUTTI I POST
 posts.get("/posts", logger, async (req, res) => {
@@ -85,7 +158,7 @@ posts.post("/posts/create", logger, validatePost, async (req, res) => {
       value: Number(req.body.readTime.value),
       unit: req.body.readTime.unit,
     },
-    author: "651d3e4114e8904e0f148f2f",
+    author: req.body.author,
     content: req.body.content,
   });
   try {
@@ -307,5 +380,46 @@ posts.delete("/posts/:postId/comments/:commentId/delete", async (req, res) => {
     });
   }
 });
+
+//PATCH DELLA NUOVA COVER DI UN POST ESISTENTE CON CLOUDINARY
+
+posts.patch(
+  "/posts/:postId/coverUpdate",
+  cloudUpload.single("cover"),
+  async (req, res) => {
+    const { postId } = req.params;
+    const postExist = await PostModel.findById(postId);
+    if (!postExist) {
+      return res.status(404).send({
+        statusCode: 404,
+        message: "This post doesn't exists",
+      });
+    }
+    try {
+      const coverToUpdate = req.body;
+      const options = { new: true };
+      const result = await PostModel.findByIdAndUpdate(
+        postId,
+        coverToUpdate,
+        options
+      );
+      res
+        .status(201)
+        // .json({
+        //   cover: req.file.path,
+        // })
+        .send({
+          statusCode: 200,
+          message: "Post cover edited succesfully",
+          result,
+        });
+    } catch (error) {
+      res.status(500).send({
+        statusCode: 500,
+        message: "Errore interno del server",
+      });
+    }
+  }
+);
 
 module.exports = posts;
