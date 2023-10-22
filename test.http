@@ -34,6 +34,7 @@ Content-Type: application/json
 //CHIAMATE PER I POST
 ####
 GET http://localhost:5050/posts?page=1
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiQ2ljY2lvIiwic3VybmFtZSI6IkdpYW5mcmFuY2VzY28iLCJlbWFpbCI6ImVtYUBnbWFpbC5jb20iLCJpYXQiOjE2OTc5MjAzMTksImV4cCI6MTY5ODAwNjcxOX0.JYIjHTRUOKyDrYf5wiybJY6jYAVO3A5HSow8f3nGDEA
 
 ####
 GET http://localhost:5050/authors/byId/651d3e4114e8904e0f148f2f
@@ -85,7 +86,8 @@ Content-Type: application/json
   "surname":"Gianfrancesco",
   "email":"ema@gmail.com",
   "birthday": "14/04/2000",
-  "avatar":"Ema"
+  "avatar":"Ema",
+  "password":"dewdewdwe32"
 }
 
 
@@ -121,4 +123,14 @@ Content-Type: application/json
 
 {
   "cover":"prova"
+} 
+
+#### //LOGIN
+
+POST http://localhost:5050/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "email":"ema@gmail.com",
+  "password": "dewdewdwe32"
 } 

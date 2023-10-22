@@ -7,7 +7,7 @@ const multer = require("multer");
 const crypto = require("crypto");
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
-const bcrypt = require('bcrypt')
+const bcrypt = require("bcrypt");
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -120,17 +120,17 @@ authors.get("/authors/byId/:authorId", async (req, res) => {
   }
 });
 
-
-
 authors.post("/authors/create", validateAuthor, async (req, res) => {
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
-  const salt = await bcrypt.genSalt(10)
   const newAuthor = new AuthorModel({
     name: req.body.name,
     surname: req.body.surname,
     email: req.body.email,
     birthday: req.body.birthday,
     avatar: req.body.avatar,
+    password: hashedPassword,
   });
   try {
     const author = await newAuthor.save();

@@ -9,6 +9,7 @@ const multer = require("multer");
 const crypto = require("crypto");
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const verifyToken = require("../middleware/verifyToken");
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -79,7 +80,7 @@ posts.post("/posts/upload", upload.single("cover"), async (req, res) => {
 });
 
 //GET DI TUTTI I POST
-posts.get("/posts", logger, async (req, res) => {
+posts.get("/posts", verifyToken, logger, async (req, res) => {
   const { page = 1, pageSize = 4 } = req.query;
 
   try {
