@@ -4,7 +4,8 @@ const cors = require("cors");
 const authorsRoute = require("./routes/authors");
 const postsRoute = require("./routes/posts");
 const emailRoute = require("./routes/sendEmail");
-const loginRoute = require("./routes/login")
+const loginRoute = require("./routes/login");
+const githubRoute = require("./routes/github");
 const path = require("path");
 require("dotenv").config();
 const PORT = 5050;
@@ -22,7 +23,8 @@ app.use(express.json());
 app.use("/", authorsRoute);
 app.use("/", postsRoute);
 app.use("/", emailRoute);
-app.use("/", loginRoute)
+app.use("/", loginRoute);
+app.use("/", githubRoute);
 //http://localhost:5050/
 /*app.get("/", (req, res) => {
   res.status(200).send({
